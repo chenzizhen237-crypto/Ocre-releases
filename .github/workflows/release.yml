@@ -79,6 +79,10 @@ jobs:
         run: rustup show # installs the toolchain pinned in rust-toolchain.toml
       - working-directory: src
         run: pnpm install --frozen-lockfile
+      # pnpm 12 skips Electron's install script; electron-builder packages node_modules/electron/dist.
+      - name: Download Electron
+        working-directory: src/apps/desktop
+        run: node node_modules/electron/install.js
       - name: Build and package (engine, app, dmg, zip, latest-mac.yml)
         working-directory: src
         run: pnpm --filter ./apps/desktop dist && ls -l apps/desktop/dist
