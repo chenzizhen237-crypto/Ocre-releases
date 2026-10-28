@@ -1,5 +1,6 @@
 # Builds the Ocre desktop app (macOS, Apple Silicon) from the private chenzizhen237-crypto/Ocre-dev
-# source and publishes it here, where the in-app updater reads latest-mac.yml. The release files live in this public repo; the source stays private.
+# source and publishes it here, where the in-app updater reads latest-mac.yml.
+# The release files live in this public repo; the source stays private.
 #
 # Started by a v* tag in Ocre-dev (its release.yml sends a repository_dispatch) or by hand from the
 # Actions tab. Neither trigger can come from a fork or a pull request, so the secret stays here.
