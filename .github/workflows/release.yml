@@ -60,6 +60,15 @@ jobs:
           persist-credentials: false
           path: src
           fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          # No dependency cache: a poisoned cache entry would end up inside published installers.
+          package-manager-cache: false
+      - uses: pnpm/action-setup@v6 # version from package.json "packageManager"
+        with:
+          package_json_file: src/package.json
+      # Node comes from setup-node, before anything runs it: the self-hosted runner's own PATH has none.
       - name: Tag matches apps/desktop/package.json version
         if: env.DRY_RUN != 'true'
         working-directory: src
@@ -67,14 +76,6 @@ jobs:
           v=$(node -p 'require("./apps/desktop/package.json").version')
           [ "v$v" = "$TAG" ] || { echo "::error::tag $TAG but apps/desktop/package.json says $v"; exit 1; }
           echo "VERSION=$v" >> "$GITHUB_ENV"
-      - uses: pnpm/action-setup@v6 # version from package.json "packageManager"
-        with:
-          package_json_file: src/package.json
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          # No dependency cache: a poisoned cache entry would end up inside published installers.
-          package-manager-cache: false
       - working-directory: src
         run: rustup show # installs the toolchain pinned in rust-toolchain.toml
       - working-directory: src
